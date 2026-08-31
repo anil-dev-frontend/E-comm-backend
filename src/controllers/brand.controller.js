@@ -1,5 +1,5 @@
 
-const Brand = require("../models/brand");
+const Brand = require("../models/brands");
 
 // 1. Create Brand (POST)
 exports.createBrand = async (req, res) => {
