@@ -13,12 +13,14 @@ app.use(morgan("dev"));
 const categoryRoutes = require("./routes/category-routes");
 const brandsRoutes = require("./routes/brand-routes");
 const productRoutes = require("./routes/product-routes");
+const customerRoutes = require("./routes/customer-routes");
 
 
 //Using Routes
 app.use("/api/category",categoryRoutes);
 app.use("/api/brand",brandsRoutes);
 app.use("/api/product",productRoutes);
+app.use("/api/home", customerRoutes); 
 
 // Test API
 app.get("/", (req, res) => {

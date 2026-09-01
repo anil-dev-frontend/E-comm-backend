@@ -29,12 +29,25 @@ const productSchema = new mongoose.Schema({
     ref: 'Category', 
     required: true 
   },
+  brandId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Brand', 
+    required: true 
+  },
 
   image: [
     {
       type: String
     }
-  ]
+  ],
+  isFeatured: {
+    type: Boolean,
+    default: false 
+  },
+  isNewProduct: { 
+    type: Boolean,
+    default: false 
+  }
 }, {
   timestamps: true 
 });
