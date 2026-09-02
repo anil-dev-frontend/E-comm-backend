@@ -16,11 +16,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  
   isAdmin: {
     type: Boolean,
     required: true,
     default: false 
+  },
+  
+  otp: {
+    type: String,
+    default: null
+  },
+  otpExpires: {
+    type: Date,
+    default: null
   }
 }, {
   timestamps: true
