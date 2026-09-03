@@ -209,6 +209,44 @@ const getProductList = async (req, res) => {
   }
 };
 
+const getProductById = async (req, res) => {
+
+  try {
+
+    const { id } = req.params;
+
+    const product = await Product.findById(id)
+      .populate("categoryId", "name")
+      .populate("brandId", "name");
+
+    if (!product) {
+
+      return res.status(404).json({
+        status: "N",
+        message: "Product not found",
+        data: null
+      });
+
+    }
+
+    res.status(200).json({
+      status: "Y",
+      message: "Product fetched successfully",
+      data: product
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      status: "N",
+      message: "Server Error",
+      error: error.message
+    });
+
+  }
+
+};
+
 
 module.exports = {
   createProduct,
@@ -217,5 +255,6 @@ module.exports = {
   deleteProduct,
   getNewProducts,
   getFeaturedProducts,
-  getProductList
+  getProductList,
+  getProductById
 };

@@ -96,6 +96,33 @@ exports.deleteBrand = async (req, res) => {
   }
 };
 
+exports.getCustomerBrands = async (req, res) => {
+  try {
+    const brands = await Brand.find().sort({ createdAt: -1 });
+
+    if (!brands || brands.length === 0) {
+      return res.status(200).json({
+        status: "N",
+        message: "No brands found",
+        data: []
+      });
+    }
+
+    res.status(200).json({
+      status: "Y",
+      message: "Brands fetched successfully",
+      data: brands
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      status: "N",
+      message: "Server Error",
+      error: error.message
+    });
+  }
+};
+
 
 
 
