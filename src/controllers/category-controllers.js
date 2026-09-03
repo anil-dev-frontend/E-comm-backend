@@ -92,12 +92,29 @@ exports.deleteCategory = async (req, res) => {
 
 
 
-//  exports.createCategory = async (req, res) => {
+exports.getCustomerCategories = async (req, res) => {
+  try {
+    const categories = await Category.find().sort({ createdAt: -1 });
 
-//   let model = req.body;
-//   let category = new Category({
-//     name:model.name
-//   })
-//   category.save();
-//   res.send(category.toObject())
-//  }
+    if (!categories || categories.length === 0) {
+      return res.status(200).json({
+        status: "N",
+        message: "No categories found",
+        data: []
+      });
+    }
+
+    res.status(200).json({
+      status: "Y",
+      message: "Categories fetched successfully",
+      data: categories
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      status: "N",
+      message: "Server Error",
+      error: error.message
+    });
+  }
+};

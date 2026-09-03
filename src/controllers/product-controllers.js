@@ -127,4 +127,95 @@ const getFeaturedProducts = async (req, res) => {
 };
 
 
-module.exports = {createProduct,getProduct,updateProduct,deleteProduct,getNewProducts,getFeaturedProducts};
+const getProductList = async (req, res) => {
+  try {
+    const {
+      searchTerm = "",
+      categoryId = "",
+      brandId = "",
+      page = 1,
+      pageSize = 10
+    } = req.query;
+
+    const currentPage = Number(page);
+    const limit = Number(pageSize);
+    const skip = (currentPage - 1) * limit;
+
+    const filter = {};
+
+    // Search by Name, Short Description and Description
+    if (searchTerm.trim()) {
+      filter.$or = [
+        {
+          name: {
+            $regex: searchTerm.trim(),
+            $options: "i"
+          }
+        },
+        {
+          shortDescription: {
+            $regex: searchTerm.trim(),
+            $options: "i"
+          }
+        },
+        {
+          description: {
+            $regex: searchTerm.trim(),
+            $options: "i"
+          }
+        }
+      ];
+    }
+
+    // Category Filter
+    if (categoryId) {
+      filter.categoryId = categoryId;
+    }
+
+    // Brand Filter
+    if (brandId) {
+      filter.brandId = brandId;
+    }
+
+    // Total Products
+    const totalProducts = await Product.countDocuments(filter);
+
+    // Product List
+    const products = await Product.find(filter)
+      .populate("categoryId", "name")
+      .populate("brandId", "name")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      status: "Y",
+      message: "Products fetched successfully",
+      data: products,
+      pagination: {
+        total: totalProducts,
+        page: currentPage,
+        pageSize: limit,
+        totalPages: Math.ceil(totalProducts / limit)
+      }
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      status: "N",
+      message: "Server Error",
+      error: error.message
+    });
+  }
+};
+
+
+module.exports = {
+  createProduct,
+  getProduct,
+  updateProduct,
+  deleteProduct,
+  getNewProducts,
+  getFeaturedProducts,
+  getProductList
+};
