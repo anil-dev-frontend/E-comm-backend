@@ -17,6 +17,7 @@ const brandsRoutes = require("./routes/brand-routes");
 const productRoutes = require("./routes/product-routes");
 const customerRoutes = require("./routes/customer-routes");
 const userRoutes = require("./routes/auth-routes");
+const wishlistRoutes = require("./routes/wishlist-routes");
 
 
 //Using Routes
@@ -25,6 +26,7 @@ app.use("/api/brand",authenticateJWT,isAdmin,brandsRoutes);
 app.use("/api/product",authenticateJWT,isAdmin,productRoutes);
 app.use("/api/home",authenticateJWT, customerRoutes); 
 app.use("/api/auth", userRoutes); 
+app.use("/api/wishlist", authenticateJWT, wishlistRoutes);
 
 // Test API
 app.get("/", (req, res) => {
